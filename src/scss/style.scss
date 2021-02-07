@@ -1,3 +1,38 @@
 @charset "utf-8";
 @import "setting";
 @import "mixin";
+
+html {
+  font-size: vw(10);
+}
+
+#wrapper {
+  padding: 30vh rem(20);
+}
+#container {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.scroll-contents {
+  overflow: hidden;
+  overflow-x: auto;
+  margin-right: rem(-20);
+}
+
+.knob {
+  position: relative;
+  border-radius: 6px;
+  background-color: #eaeaea;
+  margin-top: 15px;
+  height: 12px;
+  overflow: hidden;
+  > span {
+    border-radius: 6px;
+    background-color: #ccc;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    touch-action: pan-y;
+  }
+}
