@@ -18,6 +18,10 @@ type Point = {
 
 const UA = new UAParser().getDevice();
 
+
+/*
+** スクロールコンテナを制御するクラス
+*/
 class ScrollCtrl extends EventEmitter {
   DOM: ScrollDOM;
   emit: any;
@@ -46,12 +50,16 @@ class ScrollCtrl extends EventEmitter {
     this.emit('scroll', x);
   }
 
-  scrollEvent(x) {
+  scrollEvent(x: number) {
     const w = this.DOM.inner.clientWidth * x;
     this.DOM.el.scrollTo(w, 0);
   }
 }
 
+
+/*
+** つまみを制御するクラス
+*/
 class KnobCtrl extends EventEmitter {
   DOM: KnobDOM;
   isMove: boolean;
@@ -62,7 +70,7 @@ class KnobCtrl extends EventEmitter {
   emit: any;
   on: any;
 
-  constructor(el, per) {
+  constructor(el: any, per: number) {
     super();
     this.DOM = {
       el: el.children[0],
@@ -77,6 +85,11 @@ class KnobCtrl extends EventEmitter {
     this.DOM.el.style.width = `${this.knobWidth * 100}%`;
     this.DOM.el.style.left = `${this.x}%`;
     this._enabled();
+
+    // つまみの幅が100％の時は非表示
+    if(this.knobWidth === 1) {
+      this.DOM.parent.classList.add('is-hide');
+    }
   }
 
   _enabled() {
@@ -90,7 +103,7 @@ class KnobCtrl extends EventEmitter {
   }
 
   // 開始
-  _enter(e) {
+  _enter(e: any) {
     e = UA.type !== undefined ? e.changedTouches[0] : e;
     this.isMove = true;
     // ポイントを記憶
@@ -107,7 +120,7 @@ class KnobCtrl extends EventEmitter {
   }
 
   // 移動中
-  _scroll(e) {
+  _scroll(e: any) {
     if(this.isMove === false) return;
     e = UA.type !== undefined ? e.changedTouches[0] : e;
 
@@ -119,27 +132,35 @@ class KnobCtrl extends EventEmitter {
     this.emit('scroll', this.x);
   }
 
-  scrollEvent(x) {
+  scrollEvent(x: number) {
     this.x = x;
     this.DOM.el.style.left = `${this.x * 100}%`;
   }
 
-  _resize(per) {
+  _resize(per: number) {
     this.parentWidth = this.DOM.parent.clientWidth;
     this.knobWidth = per;
     this.DOM.el.style.width = `${this.knobWidth * 100}%`;
+
+    this.knobWidth === 1
+      ? this.DOM.parent.classList.add('is-hide')
+      : this.DOM.parent.classList.remove('is-hide');
   }
 }
 
+
+/*
+** 全体を制御するクラス
+*/
 export default class {
   List: any[];
 
-  constructor(nodeList) {
+  constructor(nodeList: NodeList) {
     this.List = [...nodeList].map(this._init.bind(this));
     this._enabled();
   }
 
-  _init(el) {
+  _init(el: HTMLElement) {
     // つまみを追加
     el.insertAdjacentHTML(
       'afterend',
@@ -150,8 +171,8 @@ export default class {
     const knobCtrl:KnobCtrl = new KnobCtrl(el.nextElementSibling, scrollCtrl.getPercent);
 
     // 相互に作用させる
-    scrollCtrl.on('scroll', (x) => knobCtrl.scrollEvent(x));
-    knobCtrl.on('scroll', (x) => scrollCtrl.scrollEvent(x));
+    scrollCtrl.on('scroll', (x: number) => knobCtrl.scrollEvent(x));
+    knobCtrl.on('scroll', (x: number) => scrollCtrl.scrollEvent(x));
 
     return {
       scrollCtrl,
@@ -166,7 +187,7 @@ export default class {
   }
 
   _resize() {
-    this.List.forEach(x => {
+    this.List.forEach((x: any) => {
       x.knobCtrl._resize(x.scrollCtrl.getPercent);
     });
   }

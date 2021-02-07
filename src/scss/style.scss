@@ -4,14 +4,25 @@
 
 html {
   font-size: vw(10);
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 #wrapper {
-  padding: 30vh rem(20);
+  padding: 0 rem(20);
+  width: 100%;
 }
-#container {
+.container {
   max-width: 750px;
   margin: 0 auto;
+  & + & {
+    margin-top: rem(20);
+  }
 }
 
 .scroll-contents {
@@ -34,9 +45,12 @@ html {
   margin-top: 15px;
   height: 12px;
   overflow: hidden;
+  &.is-hide {
+    display: none !important;
+  }
   > span {
     border-radius: 6px;
-    background-color: #ccc;
+    background-color: #009784;
     cursor: grab;
     position: absolute;
     top: 0;
