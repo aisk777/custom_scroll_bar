@@ -1,0 +1,88 @@
+// placeholder
+@mixin placeholder($color) {
+  ::-webkit-input-placeholder {
+    color: $color;
+  }
+  :-ms-input-placeholder {
+    color: $color;
+  }
+  ::-ms-input-placeholder {
+    color: $color;
+  }
+  ::placeholder {
+    color: $color;
+  }
+}
+
+// メディアクエリ
+@mixin pc() {
+  @media only screen and (min-width: #{$bp_pc}) {
+    @content;
+  }
+}
+@mixin sp() {
+  @media only screen and (max-width: #{$bp_sp}) {
+    @content;
+  }
+}
+@mixin min($min) {
+  @media only screen and (min-width: #{$min}px) {
+    @content;
+  }
+}
+@mixin max($max) {
+  @media only screen and (max-width: #{$max}px) {
+    @content;
+  }
+}
+@mixin minmax($min, $max) {
+  @media only screen and (min-width: #{$min}px) and (max-width: #{$max}px) {
+    @content;
+  }
+}
+
+// パーセント変換
+@function per($size, $standard) {
+  @return $size / $standard * 100%;
+}
+
+// settingで指定した幅を基準にvwを返す
+@function vw($size, $viewport:$vw_standard_width) {
+  $rate: 100 / $viewport;
+  @return $rate * $size * 1vw;
+}
+
+// vh変換
+@function vh($size, $viewport:1080) {
+  $rate: 100 / $viewport;
+  @return $rate * $size * 1vh;
+}
+
+// rem変換
+@function rem($px) {
+  @return $px * 0.1rem;
+}
+
+// TypoGraphy
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+@mixin fluid-type($min-vw, $max-vw, $min-fz, $max-fz) {
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-fz);
+  $u4: unit($max-fz);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    & {
+      font-size: vw(10);
+      @media screen and (min-width: $min-vw) {
+        font-size: calc(#{$min-fz} + #{strip-unit($max-fz - $min-fz)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
+      }
+      @media screen and (min-width: $max-vw) {
+        font-size: (10 / 16 * 100%);
+      }
+    }
+  }
+}

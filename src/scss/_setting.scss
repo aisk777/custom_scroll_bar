@@ -1,0 +1,15 @@
+// placeholder色
+$placeholderColor: #c3c3c3;
+
+// メディアクエリの基準幅
+$bp_sp: 750px;
+$bp_pc: 751px;
+
+//vwの基準となる幅 →320px=スマホ最小
+$vw_standard_width: 375;
+
+// easing
+$easeOutQuart: cubic-bezier(0.25, 1, 0.5, 1);
+$easeInOutCubic: cubic-bezier(0.65, 0, 0.35, 1);
+$easeOutBack: cubic-bezier(0.34, 1.56, 0.64, 1);
+$easeInBack: cubic-bezier(0.36, 0, 0.66, -0.56);
